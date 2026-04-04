@@ -196,7 +196,7 @@ export default function Header() {
                 <Input
                   autoFocus
                   value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value)}
                   placeholder="Search Dashboard, Transactions, Insights, Settings..."
                   className="h-10 pl-9 pr-20"
                 />
