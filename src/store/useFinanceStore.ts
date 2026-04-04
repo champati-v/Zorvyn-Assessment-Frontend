@@ -1,16 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type Role = "admin" | "viewer";
+import { transactions as seededTransactions } from "@/data/transactions";
+import type { Transaction, UserRole } from "@/types";
 
-interface Transaction {
-  id: string;
-  title: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-  date: string;
-}
+export type Role = UserRole;
 
 interface FinanceState {
   role: Role;
@@ -18,6 +12,8 @@ interface FinanceState {
 
   setRole: (role: Role) => void;
   addTransaction: (tx: Transaction) => void;
+  updateTransaction: (id: string, tx: Transaction) => void;
+  deleteTransaction: (id: string) => void;
 }
 
 export const useFinanceStore = create<FinanceState>()(
@@ -25,16 +21,7 @@ export const useFinanceStore = create<FinanceState>()(
     (set) => ({
       role: "admin",
 
-      transactions: [
-        {
-          id: "1",
-          title: "Amazon India",
-          amount: -1249,
-          category: "Shopping",
-          type: "expense",
-          date: "2026-03-12",
-        },
-      ],
+      transactions: seededTransactions,
 
       setRole: (role) => set({ role }),
 
@@ -42,7 +29,19 @@ export const useFinanceStore = create<FinanceState>()(
         set((state) => ({
           transactions: [tx, ...state.transactions],
         })),
+
+      updateTransaction: (id, tx) =>
+        set((state) => ({
+          transactions: state.transactions.map((item) =>
+            item.id === id ? tx : item
+          ),
+        })),
+
+      deleteTransaction: (id) =>
+        set((state) => ({
+          transactions: state.transactions.filter((item) => item.id !== id),
+        })),
     }),
-    { name: "finance-storage" }
+    { name: "finance-storage-v2" }
   )
 );

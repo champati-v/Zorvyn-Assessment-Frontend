@@ -1,34 +1,43 @@
 import { Card, CardContent } from "@/components/ui/card";
 
-const transactions = [
-  { title: "Amazon India", amount: -1249 },
-  { title: "Starbucks Coffee", amount: -450 },
-  { title: "Salary Deposit", amount: 65000 },
-  { title: "Uber India", amount: -320 },
-  { title: "Netflix Subscription", amount: -649 },
-];
+import type { Transaction } from "@/types";
+import { formatCurrency, getRecentTransactions } from "@/lib/transactions";
 
-export default function RecentTransactions() {
+interface Props {
+  transactions: Transaction[];
+}
+
+export default function RecentTransactions({ transactions }: Props) {
+  const recentTransactions = getRecentTransactions(transactions);
+
   return (
     <Card>
-      <CardContent className="p-5 space-y-4">
-        <div className="flex justify-between">
+      <CardContent className="space-y-4 p-5">
+        <div className="flex items-center justify-between">
           <h3 className="font-medium">Recent Transactions</h3>
-          <span className="text-sm text-primary cursor-pointer">
+          <span className="cursor-pointer text-sm text-primary">
             View all
           </span>
         </div>
 
         <div className="space-y-3">
-          {transactions.map((t, i) => (
-            <div key={i} className="flex justify-between text-sm">
-              <span>{t.title}</span>
+          {recentTransactions.map((transaction) => (
+            <div
+              key={transaction.id}
+              className="flex items-center justify-between text-sm"
+            >
+              <div>
+                <div className="font-medium">{transaction.title}</div>
+                <div className="text-xs text-muted-foreground">
+                  {transaction.category} · {transaction.date}
+                </div>
+              </div>
               <span
                 className={
-                  t.amount > 0 ? "text-green-500" : "text-red-500"
+                  transaction.amount > 0 ? "text-emerald-500" : "text-rose-500"
                 }
               >
-                ₹{t.amount}
+                {formatCurrency(transaction.amount)}
               </span>
             </div>
           ))}

@@ -1,33 +1,33 @@
-import { useFinanceStore } from "@/store/useFinanceStore";
+import { Button } from "@/components/ui/button";
+import { useFinanceStore, type Role } from "@/store/useFinanceStore";
 
 export default function SettingsPage() {
   const { role, setRole } = useFinanceStore();
 
   return (
-    <div className="space-y-6 max-w-xl">
-      <h1 className="text-xl font-semibold">Settings</h1>
-
-      {/* Role */}
+    <div className="max-w-xl space-y-6">
       <div>
-        <p className="text-sm mb-2">Role</p>
+        <h1 className="text-xl font-semibold">Settings</h1>
+        <p className="text-sm text-muted-foreground">
+          Profile, export, and role controls.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-sm font-medium">Role</p>
         <select
           value={role}
-          onChange={(e) => setRole(e.target.value as any)}
-          className="bg-muted px-3 py-2 rounded"
+          onChange={(e) => setRole(e.target.value as Role)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
         >
           <option value="viewer">Viewer</option>
           <option value="admin">Admin</option>
         </select>
       </div>
 
-      {/* Export */}
-      <div className="flex gap-3">
-        <button className="border px-4 py-2 rounded">
-          Export CSV
-        </button>
-        <button className="border px-4 py-2 rounded">
-          Export JSON
-        </button>
+      <div className="flex flex-wrap gap-3">
+        <Button variant="outline">Export CSV</Button>
+        <Button variant="secondary">Export JSON</Button>
       </div>
     </div>
   );

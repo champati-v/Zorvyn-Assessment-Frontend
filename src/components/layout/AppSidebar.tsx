@@ -1,6 +1,7 @@
 import {
   CircleUserRound,
   Check,
+  ChartColumnStacked,
   LayoutDashboard,
   Receipt,
   BarChart3,
@@ -24,7 +25,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const navigationItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -38,9 +41,16 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { role, setRole } = useFinanceStore();
+  const { state: sidebarState } = useSidebar();
   const roleLabel = role === "admin" ? "Admin" : "Viewer";
   const [footerOpen, setFooterOpen] = React.useState(false);
   const footerRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    if (sidebarState === "collapsed") {
+      setFooterOpen(false);
+    }
+  }, [sidebarState]);
 
   React.useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {
@@ -69,24 +79,42 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="gap-1 px-4 py-4">
-        <div className="text-lg font-semibold tracking-tight text-sidebar-foreground">
-          Zorvyn
-        </div>
-        <div className="text-xs text-sidebar-foreground/70">
-          Financial dashboard
+      <SidebarHeader className="gap-3 px-3 py-4 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2">
+        <div className="flex items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/35 px-3 py-2 shadow-sm group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:py-0 group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:shadow-none">
+          <div className="flex size-8 items-center justify-center rounded-xl bg-[color-mix(in_oklch,var(--sidebar-foreground)_14%,transparent)] text-sidebar-foreground ring-1 ring-sidebar-border/50 group-data-[collapsible=icon]:size-7">
+            <ChartColumnStacked className="size-3.5" />
+          </div>
+          <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+            <div className="text-sm font-semibold tracking-tight text-sidebar-foreground">
+              Zorvyn
+            </div>
+            <div className="text-xs text-sidebar-foreground/70">
+              Financial dashboard
+            </div>
+          </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="px-2 py-1">
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map(({ to, icon: Icon, label }) => (
+              {navigationItems.map(({ to, icon: Icon, label }, index) => (
                 <SidebarMenuItem key={to}>
                   <SidebarMenuButton
                     isActive={location.pathname === to}
                     render={(props) => <NavLink to={to} end {...props} />}
+                    className={cn(
+                      "rounded-xl transition-colors",
+                      index === 0 &&
+                        "bg-[color-mix(in_oklch,var(--chart-1)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-1)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-1)_16%,transparent)] data-active:text-[var(--chart-1)]",
+                      index === 1 &&
+                        "bg-[color-mix(in_oklch,var(--chart-2)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-2)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-2)_16%,transparent)] data-active:text-[var(--chart-2)]",
+                      index === 2 &&
+                        "bg-[color-mix(in_oklch,var(--chart-3)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-3)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-3)_16%,transparent)] data-active:text-[var(--chart-3)]",
+                      index === 3 &&
+                        "bg-[color-mix(in_oklch,var(--chart-4)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-4)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-4)_16%,transparent)] data-active:text-[var(--chart-4)]"
+                    )}
                   >
                     <Icon />
                     <span>{label}</span>
@@ -98,15 +126,15 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="px-4 pb-4">
+      <SidebarFooter className="px-4 pb-4 group-data-[collapsible=icon]:px-2">
         <div ref={footerRef} className="relative">
           <button
             type="button"
             onClick={() => setFooterOpen((open) => !open)}
-            className="flex w-full items-center gap-3 rounded-lg border border-sidebar-border bg-sidebar-accent/30 px-3 py-2 text-left text-sidebar-foreground shadow-sm outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+            className="flex w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/25 px-3 py-2 text-left text-sidebar-foreground shadow-sm outline-none transition-colors hover:bg-sidebar-accent/40 focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:bg-sidebar-accent/20"
           >
-            <CircleUserRound className="size-9 shrink-0 text-sidebar-foreground" />
-            <div className="min-w-0 flex-1">
+            <CircleUserRound className="size-8 shrink-0 text-sidebar-foreground group-data-[collapsible=icon]:size-7" />
+            <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
               <div className="truncate text-sm font-medium text-sidebar-foreground">
                 {roleLabel}
               </div>
@@ -115,14 +143,15 @@ export function AppSidebar() {
               </div>
             </div>
             <ChevronDown
-              className={`size-4 shrink-0 transition-transform ${
-                footerOpen ? "rotate-180" : ""
-              }`}
+              className={cn(
+                "size-4 shrink-0 transition-transform group-data-[collapsible=icon]:hidden",
+                footerOpen && "rotate-180"
+              )}
             />
           </button>
 
           {footerOpen ? (
-            <div className="absolute bottom-full left-0 right-0 z-20 mb-2 rounded-xl border border-sidebar-border bg-sidebar/95 p-2 shadow-lg ring-1 ring-sidebar-border/60 backdrop-blur-md">
+            <div className="absolute z-20 rounded-xl border border-sidebar-border bg-sidebar/95 p-2 shadow-lg ring-1 ring-sidebar-border/60 backdrop-blur-md bottom-full left-0 right-0 mb-2 group-data-[collapsible=icon]:bottom-auto group-data-[collapsible=icon]:left-full group-data-[collapsible=icon]:top-1/2 group-data-[collapsible=icon]:right-auto group-data-[collapsible=icon]:ml-2 group-data-[collapsible=icon]:mb-0 group-data-[collapsible=icon]:w-64 group-data-[collapsible=icon]:-translate-y-1/2">
               <div className="rounded-lg bg-sidebar-accent/30 px-3 py-2">
                 <div className="text-sm font-medium text-sidebar-foreground">
                   Username
@@ -136,7 +165,10 @@ export function AppSidebar() {
 
               <button
                 type="button"
-                onClick={() => navigate("/settings")}
+                onClick={() => {
+                  setFooterOpen(false);
+                  navigate("/settings");
+                }}
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
               >
                 <Settings className="size-4" />
@@ -151,7 +183,10 @@ export function AppSidebar() {
                   <button
                     key={item}
                     type="button"
-                    onClick={() => setRole(item)}
+                    onClick={() => {
+                      setRole(item);
+                      setFooterOpen(false);
+                    }}
                     className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-sidebar-accent ${
                       role === item
                         ? "bg-sidebar-accent text-sidebar-foreground"
@@ -178,7 +213,10 @@ export function AppSidebar() {
                   <button
                     key={value}
                     type="button"
-                    onClick={() => setTheme(value)}
+                    onClick={() => {
+                      setTheme(value);
+                      setFooterOpen(false);
+                    }}
                     className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-sidebar-accent ${
                       theme === value
                         ? "bg-sidebar-accent text-sidebar-foreground"
