@@ -7,6 +7,7 @@ import {
   Plus,
   Search,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -251,8 +252,14 @@ export default function TransactionsPageContent() {
 
     if (editingId) {
       updateTransaction(editingId, payload);
+      toast.success(`Updated "${payload.title}"`, {
+        description: "The transaction was saved to local data.",
+      });
     } else {
       addTransaction(payload);
+      toast.success(`Added "${payload.title}"`, {
+        description: "The transaction is now available across the dashboard.",
+      });
     }
 
     closeForm();
@@ -268,6 +275,9 @@ export default function TransactionsPageContent() {
     }
 
     deleteTransaction(pendingDeleteTransaction.id);
+    toast.success(`Deleted "${pendingDeleteTransaction.title}"`, {
+      description: "The transaction was removed from local data.",
+    });
     setPendingDeleteTransaction(null);
   };
 

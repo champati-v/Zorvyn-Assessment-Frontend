@@ -10,6 +10,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -106,6 +107,20 @@ export default function SettingsPageContent() {
   const activeTheme = theme ?? "system";
   const themeDisplay = themeLabel(theme, resolvedTheme);
 
+  const handleRoleChange = (nextRole: Role) => {
+    if (role === nextRole) {
+      return;
+    }
+
+    setRole(nextRole);
+    toast.success(`Switched to ${roleLabel(nextRole)} role`, {
+      description:
+        nextRole === "admin"
+          ? "Transaction management is now enabled."
+          : "You are now in read-only mode.",
+    });
+  };
+
   return (
     <div className="space-y-6">
       <section className="overflow-hidden rounded-3xl border border-border/70 bg-linear-to-br from-card via-card to-muted/30 shadow-sm">
@@ -191,7 +206,7 @@ export default function SettingsPageContent() {
                 <button
                   key={option.value}
                   type="button"
-                  onClick={() => setRole(option.value)}
+                  onClick={() => handleRoleChange(option.value)}
                   className={cn(
                     "flex w-full items-center gap-4 rounded-2xl border px-4 py-3 text-left transition-colors",
                     active

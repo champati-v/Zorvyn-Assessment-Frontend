@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 
 import App from "./App";
+import { Toaster } from "@/components/ui/sonner";
 import "@/styles/index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     >
       <BrowserRouter>
         <App />
+        <Toaster />
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>
