@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# Financial Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple finance dashboard built with React, TypeScript, Vite, ShadCN and Tailwind CSS. It helps you track transactions, view spending trends, and move between pages like Dashboard, Transactions, Insights, and Settings.
 
-Currently, two official plugins are available:
+## Local Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Make sure Node.js is installed on your machine. `npm` comes with Node.
+2. Open the project folder in your terminal:
+   ```bash
+   cd financial-dashboard
+   ```
+3. Install the project dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the app in development mode:
+   ```bash
+   npm run dev
+   ```
+5. Open the local URL shown in the terminal, usually `http://localhost:5173`.
+6. When you want to check the production build locally, run:
+   ```bash
+   npm run build
+   ```
+7. If you want to preview the production build, run:
+   ```bash
+   npm run preview
+   ```
 
-## React Compiler
+### Helpful commands
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `npm run dev` starts the app for local development.
+- `npm run build` checks TypeScript and creates the final production files.
+- `npm run preview` lets you test the built app locally.
+- `npm run lint` checks the code for style and quality issues.
 
-## Expanding the ESLint configuration
+## Approach
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The app is built in small pieces so it stays easy to understand and update.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Shared UI parts from ShadCN like buttons, cards, inputs, sheets, and sidebars live in `src/components/ui`.
+- Layout pieces like the header, sidebar, and mobile nav live in `src/components/layout`.
+- Feature-specific code lives in `src/features`, which keeps dashboard, transaction, insight, and settings logic separate from each other.
+- The app uses a shared store for data, so updates to transactions or settings show up across the dashboard without extra page reloads.
+- Routing is used to switch between pages cleanly, instead of putting everything into one large screen.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Dashboard overview with summary cards, balance charts, and recent activity
+- Transaction list where you can review income and expenses
+- Transaction editor for adding or editing entries
+- Insights page that shows spending patterns in a simple visual way
+- Settings page for changing app preferences
+- Sidebar navigation for desktop and bottom navigation for mobile
+- Quick search with `Ctrl + K` to jump to different sections
+- Theme toggle for switching the look of the app
+- Role switcher in the sidebar footer for changing the user mode
