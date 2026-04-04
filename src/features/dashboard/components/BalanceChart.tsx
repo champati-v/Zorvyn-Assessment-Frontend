@@ -41,7 +41,7 @@ function BalanceTooltip({ active, payload, label }: BalanceTooltipProps) {
       <div className="grid gap-2 text-muted-foreground">
         <div className="flex items-center justify-between gap-4">
           <span className="flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[var(--chart-1)]" />
+            <span className="size-2.5 rounded-full bg-chart-1" />
             Balance
           </span>
           <span className="font-medium text-foreground">
@@ -50,19 +50,19 @@ function BalanceTooltip({ active, payload, label }: BalanceTooltipProps) {
         </div>
         <div className="flex items-center justify-between gap-4">
           <span className="flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[var(--chart-2)]" />
+            <span className="size-2.5 rounded-full bg-chart-2" />
             Income
           </span>
-          <span className="font-medium text-[var(--chart-2)]">
+          <span className="font-medium text-chart-2">
             {formatCurrency(Number(income))}
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
           <span className="flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[var(--chart-4)]" />
+            <span className="size-2.5 rounded-full bg-chart-4" />
             Expenses
           </span>
-          <span className="font-medium text-[var(--chart-4)]">
+          <span className="font-medium text-chart-4">
             {formatCurrency(Number(expenses))}
           </span>
         </div>
@@ -82,7 +82,7 @@ export default function BalanceChart({ transactions }: Props) {
           Rolling balance based on seeded and user-added transactions.
         </p>
 
-        <div className="h-[250px]">
+        <div className="h-62.5">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>

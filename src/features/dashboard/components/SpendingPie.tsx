@@ -12,6 +12,7 @@ import type { Transaction } from "@/types";
 
 interface Props {
   transactions: Transaction[];
+  size?: "default" | "lg";
 }
 
 type PieTooltipProps = {
@@ -63,7 +64,7 @@ function PieTooltip({ active, payload, label }: PieTooltipProps) {
   );
 }
 
-export default function SpendingPie({ transactions }: Props) {
+export default function SpendingPie({ transactions, size = "default" }: Props) {
   const data = transactions
     .filter((transaction) => transaction.type === "expense")
     .reduce<Map<string, number>>((accumulator, transaction) => {
@@ -87,7 +88,7 @@ export default function SpendingPie({ transactions }: Props) {
           Expense categories sourced from the shared transaction store.
         </p>
 
-        <div className="h-[220px]">
+        <div className={size === "lg" ? "h-70" : "h-55"}>
           <ResponsiveContainer>
             <PieChart>
               <Tooltip content={<PieTooltip />} />
@@ -95,9 +96,9 @@ export default function SpendingPie({ transactions }: Props) {
                 data={chartData}
                 dataKey="value"
                 nameKey="name"
-                innerRadius={60}
-                outerRadius={90}
-                paddingAngle={4}
+                innerRadius={size === "lg" ? 78 : 60}
+                outerRadius={size === "lg" ? 118 : 90}
+                paddingAngle={size === "lg" ? 6 : 4}
               >
                 {chartData.map((entry) => (
                   <Cell key={entry.name} fill={getCategoryColor(entry.name)} />

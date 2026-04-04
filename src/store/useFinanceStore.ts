@@ -14,6 +14,7 @@ interface FinanceState {
   addTransaction: (tx: Transaction) => void;
   updateTransaction: (id: string, tx: Transaction) => void;
   deleteTransaction: (id: string) => void;
+  resetTransactions: () => void;
 }
 
 export const useFinanceStore = create<FinanceState>()(
@@ -41,6 +42,11 @@ export const useFinanceStore = create<FinanceState>()(
         set((state) => ({
           transactions: state.transactions.filter((item) => item.id !== id),
         })),
+
+      resetTransactions: () =>
+        set({
+          transactions: seededTransactions,
+        }),
     }),
     { name: "finance-storage-v2" }
   )

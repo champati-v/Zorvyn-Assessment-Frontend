@@ -11,7 +11,7 @@ import {
   Monitor,
   ChevronDown,
 } from "lucide-react";
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { useFinanceStore } from "@/store/useFinanceStore";
@@ -42,17 +42,17 @@ export function AppSidebar() {
   const { theme, setTheme } = useTheme();
   const { role, setRole } = useFinanceStore();
   const { state: sidebarState } = useSidebar();
-  const roleLabel = role === "admin" ? "Admin" : "Viewer";
-  const [footerOpen, setFooterOpen] = React.useState(false);
-  const footerRef = React.useRef<HTMLDivElement | null>(null);
+  const roleLabel = role === "admin" ? "Admin" : "User";
+  const [footerOpen, setFooterOpen] = useState(false);
+  const footerRef = useRef<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (sidebarState === "collapsed") {
       setFooterOpen(false);
     }
   }, [sidebarState]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {
       if (
         footerRef.current &&
@@ -100,20 +100,20 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map(({ to, icon: Icon, label }, index) => (
-                <SidebarMenuItem key={to}>
+                <SidebarMenuItem key={to} className="mb-2">
                   <SidebarMenuButton
                     isActive={location.pathname === to}
                     render={(props) => <NavLink to={to} end {...props} />}
                     className={cn(
                       "rounded-xl transition-colors",
                       index === 0 &&
-                        "bg-[color-mix(in_oklch,var(--chart-1)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-1)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-1)_16%,transparent)] data-active:text-[var(--chart-1)]",
+                        "bg-[color-mix(in_oklch,var(--chart-1)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-1)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-1)_16%,transparent)] data-active:text-chart-1",
                       index === 1 &&
-                        "bg-[color-mix(in_oklch,var(--chart-2)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-2)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-2)_16%,transparent)] data-active:text-[var(--chart-2)]",
+                        "bg-[color-mix(in_oklch,var(--chart-2)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-2)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-2)_16%,transparent)] data-active:text-chart-2",
                       index === 2 &&
-                        "bg-[color-mix(in_oklch,var(--chart-3)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-3)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-3)_16%,transparent)] data-active:text-[var(--chart-3)]",
+                        "bg-[color-mix(in_oklch,var(--chart-3)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-3)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-3)_16%,transparent)] data-active:text-chart-3",
                       index === 3 &&
-                        "bg-[color-mix(in_oklch,var(--chart-4)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-4)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-4)_16%,transparent)] data-active:text-[var(--chart-4)]"
+                        "bg-[color-mix(in_oklch,var(--chart-4)_10%,transparent)] hover:bg-[color-mix(in_oklch,var(--chart-4)_14%,transparent)] data-active:bg-[color-mix(in_oklch,var(--chart-4)_16%,transparent)] data-active:text-chart-4"
                     )}
                   >
                     <Icon />
@@ -131,9 +131,9 @@ export function AppSidebar() {
           <button
             type="button"
             onClick={() => setFooterOpen((open) => !open)}
-            className="flex w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/25 px-3 py-2 text-left text-sidebar-foreground shadow-sm outline-none transition-colors hover:bg-sidebar-accent/40 focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:bg-sidebar-accent/20"
+            className="flex w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/25 px-3 py-2 text-left text-sidebar-foreground shadow-sm outline-none transition-colors hover:bg-sidebar-accent/40 focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:bg-sidebar-accent/20"
           >
-            <CircleUserRound className="size-8 shrink-0 text-sidebar-foreground group-data-[collapsible=icon]:size-7" />
+            <CircleUserRound className="size-8 shrink-0 text-sidebar-foreground group-data-[collapsible=icon]:size-6 group-data-[collapsible=icon]:text-sidebar-foreground/80" />
             <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
               <div className="truncate text-sm font-medium text-sidebar-foreground">
                 {roleLabel}
@@ -151,7 +151,7 @@ export function AppSidebar() {
           </button>
 
           {footerOpen ? (
-            <div className="absolute z-20 rounded-xl border border-sidebar-border bg-sidebar/95 p-2 shadow-lg ring-1 ring-sidebar-border/60 backdrop-blur-md bottom-full left-0 right-0 mb-2 group-data-[collapsible=icon]:bottom-auto group-data-[collapsible=icon]:left-full group-data-[collapsible=icon]:top-1/2 group-data-[collapsible=icon]:right-auto group-data-[collapsible=icon]:ml-2 group-data-[collapsible=icon]:mb-0 group-data-[collapsible=icon]:w-64 group-data-[collapsible=icon]:-translate-y-1/2">
+            <div className="absolute z-20 rounded-xl border border-sidebar-border bg-sidebar/95 p-2 shadow-lg ring-1 ring-sidebar-border/60 backdrop-blur-md bottom-full left-0 right-0 mb-2 group-data-[collapsible=icon]:bottom-full group-data-[collapsible=icon]:left-full group-data-[collapsible=icon]:right-auto group-data-[collapsible=icon]:top-auto group-data-[collapsible=icon]:ml-2 group-data-[collapsible=icon]:mb-2 group-data-[collapsible=icon]:w-64">
               <div className="rounded-lg bg-sidebar-accent/30 px-3 py-2">
                 <div className="text-sm font-medium text-sidebar-foreground">
                   Username
@@ -196,7 +196,7 @@ export function AppSidebar() {
                     <span className="flex size-5 items-center justify-center rounded-full border border-sidebar-border bg-sidebar">
                       {role === item ? <Check className="size-3.5" /> : null}
                     </span>
-                    {item === "admin" ? "Admin" : "Viewer"}
+                    {item === "admin" ? "Admin" : "User"}
                   </button>
                 ))}
               </div>

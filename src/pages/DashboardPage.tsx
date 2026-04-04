@@ -36,12 +36,6 @@ export default function DashboardPage() {
     ? parseISO(sortedTransactions[0].date)
     : null;
 
-  const topCategory = expenseBreakdown[0];
-  const topCategoryShare =
-    topCategory && metrics.monthlyExpenses > 0
-      ? (topCategory.value / metrics.monthlyExpenses) * 100
-      : 0;
-
   return (
     <div className="space-y-6">
       
@@ -78,7 +72,7 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <Card className="border-border/70 bg-card/90 shadow-sm">
-          <CardHeader className="border-b border-border/70 bg-muted/20">
+          <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <LineChart className="size-4 text-chart-1" />
               Cash flow trend
@@ -87,13 +81,13 @@ export default function DashboardPage() {
               Rolling balance, income, and expenses for the current transaction set.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-3">
             <BalanceChart transactions={transactions} />
           </CardContent>
         </Card>
 
         <Card className="border-border/70 bg-card/90 shadow-sm">
-          <CardHeader className="border-b border-border/70 bg-muted/20">
+          <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ReceiptText className="size-4 text-chart-2" />
               Spending mix
@@ -104,34 +98,13 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <SpendingPie transactions={transactions} />
-
-            <div className="rounded-2xl border border-border/70 bg-background/60 p-4">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Top category
-                  </div>
-                  <div className="mt-1 text-sm font-medium">
-                    {topCategory ? topCategory.name : "No expense data"}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-semibold">
-                    {topCategory ? formatCurrency(topCategory.value) : "--"}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {topCategory ? `${topCategoryShare.toFixed(0)}% of monthly spend` : ""}
-                  </div>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
         <Card className="border-border/70 bg-card/90 shadow-sm">
-          <CardHeader className="border-b border-border/70 bg-muted/20">
+          <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wallet className="size-4 text-chart-4" />
               Recent transactions
@@ -140,7 +113,7 @@ export default function DashboardPage() {
               The latest entries flowing into the dashboard view.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-2">
             <RecentTransactions transactions={transactions} />
           </CardContent>
         </Card>
