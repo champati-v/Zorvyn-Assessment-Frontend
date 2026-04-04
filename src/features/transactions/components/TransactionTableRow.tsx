@@ -1,4 +1,10 @@
-import { MoreHorizontal, PencilLine, Trash2 } from "lucide-react";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  MoreHorizontal,
+  PencilLine,
+  Trash2,
+} from "lucide-react";
 import { format } from "date-fns";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -24,6 +30,7 @@ export default function TransactionTableRow({
 }: Props) {
   const swatch = getCategoryColor(transaction.category);
   const isIncome = transaction.type === "income";
+  const TypeIcon = isIncome ? ArrowUpRight : ArrowDownRight;
 
   return (
     <tr className="border-t border-border/60 transition-colors hover:bg-muted/30">
@@ -33,9 +40,14 @@ export default function TransactionTableRow({
       <td className="px-4 py-4 align-middle">
         <div className="flex items-center gap-3">
           <span
-            className="size-9 shrink-0 rounded-full ring-1 ring-border/60"
-            style={{ backgroundColor: swatch }}
-          />
+            className={`flex size-9 shrink-0 items-center justify-center rounded-full ring-1 ring-border/60 ${
+              isIncome
+                ? "bg-emerald-500/15 text-emerald-600"
+                : "bg-rose-500/15 text-rose-600"
+            }`}
+          >
+            <TypeIcon className="size-4" />
+          </span>
           <div className="min-w-0">
             <div className="truncate font-medium text-foreground">
               {transaction.title}

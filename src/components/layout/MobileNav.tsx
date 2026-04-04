@@ -1,4 +1,4 @@
-import { Home, BarChart3, Settings, Receipt } from "lucide-react";
+import { BarChart3, Home, Receipt, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const items = [
@@ -15,9 +15,15 @@ export default function MobileNav() {
         <NavLink
           key={to}
           to={to}
-          className="flex flex-col items-center text-muted-foreground py-3"
+          end={to === "/"}
+          className="flex flex-1 flex-col items-center text-muted-foreground py-3"
         >
-          <Icon size={20} />
+          {({ isActive }) => (
+            <Icon
+              size={20}
+              className={isActive ? "text-emerald-600" : undefined}
+            />
+          )}
         </NavLink>
       ))}
     </>

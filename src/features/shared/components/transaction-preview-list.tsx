@@ -1,7 +1,8 @@
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { format } from "date-fns";
 
 import { Card } from "@/components/ui/card";
-import { formatCurrency, getCategoryColor } from "@/lib/transactions";
+import { formatCurrency } from "@/lib/transactions";
 import type { Transaction } from "@/types";
 
 type Props = {
@@ -21,19 +22,25 @@ export default function TransactionPreviewList({
     );
   }
 
-  return (
+    return (
     <div className="space-y-3">
       {transactions.map((transaction) => {
-        const swatch = getCategoryColor(transaction.category);
+        const isIncome = transaction.type === "income";
+        const TypeIcon = isIncome ? ArrowUpRight : ArrowDownRight;
 
         return (
           <Card key={transaction.id} size="sm" className="border-border/70 bg-background/60">
             <div className="flex items-center justify-between gap-4 p-3">
               <div className="flex min-w-0 items-center gap-3">
                 <span
-                  className="size-9 shrink-0 rounded-full ring-1 ring-border/60"
-                  style={{ backgroundColor: swatch }}
-                />
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-full ring-1 ring-border/60 ${
+                    isIncome
+                      ? "bg-emerald-500/15 text-emerald-600"
+                      : "bg-rose-500/15 text-rose-600"
+                  }`}
+                >
+                  <TypeIcon className="size-4" />
+                </span>
                 <div className="min-w-0">
                   <div className="truncate text-sm font-medium">
                     {transaction.title}

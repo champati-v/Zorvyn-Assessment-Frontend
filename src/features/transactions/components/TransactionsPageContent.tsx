@@ -10,6 +10,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -180,6 +188,8 @@ export default function TransactionsPageContent() {
   const [filterType, setFilterType] = React.useState<FilterType>("all");
   const [dateRange] = React.useState<DateRangeKey>("all");
   const [selectedCategories] = React.useState<string[]>([]);
+  const [pendingDeleteTransaction, setPendingDeleteTransaction] =
+    React.useState<Transaction | null>(null);
 
   const canManage = role === "admin";
   const sortedTransactions = useMemo(
@@ -249,13 +259,16 @@ export default function TransactionsPageContent() {
   };
 
   const handleDelete = (transaction: Transaction) => {
-    const confirmed = window.confirm(
-      `Delete ${transaction.title}? This will remove it from local storage.`
-    );
+    setPendingDeleteTransaction(transaction);
+  };
 
-    if (confirmed) {
-      deleteTransaction(transaction.id);
+  const confirmDelete = () => {
+    if (!pendingDeleteTransaction) {
+      return;
     }
+
+    deleteTransaction(pendingDeleteTransaction.id);
+    setPendingDeleteTransaction(null);
   };
 
   return (
@@ -448,6 +461,43 @@ export default function TransactionsPageContent() {
         onSubmit={handleSubmit}
         onCancel={closeForm}
       />
+
+      <AlertDialog
+        open={pendingDeleteTransaction !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingDeleteTransaction(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this transaction?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingDeleteTransaction
+                ? `This will permanently remove "${pendingDeleteTransaction.title}" from your local data.`
+                : "This will permanently remove the selected transaction from your local data."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPendingDeleteTransaction(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={confirmDelete}
+            >
+              Delete transaction
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
